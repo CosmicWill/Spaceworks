@@ -33,8 +33,8 @@ namespace Spaceworks.Position {
             //Assign the static instance
             instance = this;
             //Set the default sector size to be the same as the buffer distance
-			SetSectorSize(bufferDistance);
-            instance.sceneCenter = new WorldPosition(0.0f, 0.0f, 0.0f);
+            SetSectorSize(bufferDistance);
+            instance.sceneCenter = WorldPosition.zero;
         }
 
         public void SetSectorSize(float distance){
