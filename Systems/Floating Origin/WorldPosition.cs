@@ -13,7 +13,7 @@ namespace Spaceworks.Position {
         public Vector3 sectorOffset = new Vector3(0f, 0f, 0f);
         public Long3 sector = new Long3(0,0,0);
 
-        public static readonly WorldPosition zero = new WorldPosition(0, 0, 0);
+        public static readonly WorldPosition zero = new WorldPosition(0.0f, 0.0f, 0.0f);
 
         public WorldPosition() {
             this.sectorOffset = new Vector3(0f, 0f, 0f);
