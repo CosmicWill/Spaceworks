@@ -24,33 +24,33 @@ namespace Spaceworks.Position {
                 transform.position = value;
             }
         }
-			
-		public FloatingTransform parent {
-			get;
-			set;
-		}
+
+        public FloatingTransform parent {
+            get;
+            set;
+        }
 
         private WorldPosition _local = WorldPosition.zero;
-		public WorldPosition localPosition {
+        public WorldPosition localPosition {
             get {
                 return _local;
             }
             set {
                 _local = value;
             }
-		}
+        }
 
-		public WorldPosition worldPosition {
-			get{ 
-				return (parent == null) ? this.localPosition : this.localPosition + parent.worldPosition;
-			}
-			set{ 
-				if (parent == null)
-					this.localPosition = value;
-				else
-					this.localPosition = value - parent.worldPosition;
-			}
-		}
+        public WorldPosition worldPosition {
+            get{
+                return (parent == null) ? this.localPosition : this.localPosition + parent.worldPosition;
+            }
+            set{
+                if (parent == null)
+                    this.localPosition = value;
+                else
+                    this.localPosition = value - parent.worldPosition;
+            }
+        }
 
         public bool autoDisableColliders = true;
 
@@ -66,23 +66,13 @@ namespace Spaceworks.Position {
             this.monitoredColliders = this.GetComponentsInChildren<Collider>();
         }
 
-		public void SetParent(FloatingTransform parent){
-			this.parent = parent;
-			UpdateUnityPosition ();
-		}
+        public void SetParent(FloatingTransform parent){
+            this.parent = parent;
+            UpdateUnityPosition ();
+        }
 
-		public void SetLocalPosition(WorldPosition p, WorldPosition center = null){
-			this.localPosition = p;
-            if (!center.Equals(null)) {
-                UpdateUnityPosition(center);
-            }
-            else {
-                UpdateUnityPosition();
-            }
-		}
-
-		public void SetWorldPosition(WorldPosition p, WorldPosition center = null) {
-			this.worldPosition = p;
+        public void SetLocalPosition(WorldPosition p, WorldPosition center = null){
+            this.localPosition = p;
             if (!center.Equals(null)) {
                 UpdateUnityPosition(center);
             }
@@ -91,11 +81,21 @@ namespace Spaceworks.Position {
             }
         }
 
-		public void UpdateUnityPosition(){
-			UpdateUnityPosition(FloatingOrigin.center);
-		}
+        public void SetWorldPosition(WorldPosition p, WorldPosition center = null) {
+            this.worldPosition = p;
+            if (!center.Equals(null)) {
+                UpdateUnityPosition(center);
+            }
+            else {
+                UpdateUnityPosition();
+            }
+        }
 
-		public void UpdateUnityPosition(WorldPosition sceneCenter){
+        public void UpdateUnityPosition(){
+            UpdateUnityPosition(FloatingOrigin.center);
+        }
+
+        public void UpdateUnityPosition(WorldPosition sceneCenter){
             //disable colliders 
             List<Collider> touchedColliders = new List<Collider>();
             if (autoDisableColliders) {
@@ -107,7 +107,7 @@ namespace Spaceworks.Position {
                 }
             }
 
-			unityPosition = (worldPosition - sceneCenter).ToVector3();
+            unityPosition = (worldPosition - sceneCenter).ToVector3();
 
             //enable colliders
             if (autoDisableColliders) {
@@ -115,10 +115,22 @@ namespace Spaceworks.Position {
                     c.enabled = true;
                 }
             }
-		}
+        }
 
-		public virtual void OnOriginChange(WorldPosition sceneCenter) {
-			UpdateUnityPosition (sceneCenter);
+        public void UpdateWorldPosition(WorldPosition sceneCenter, WorldPosition delta)
+        {
+            this.worldPosition = new WorldPosition(this.unityPosition) + (sceneCenter - delta);
+        }
+
+        public virtual void OnOriginChange(WorldPosition sceneCenter)
+        {
+            UpdateUnityPosition(sceneCenter);
+        }
+
+        public virtual void OnOriginChange(WorldPosition sceneCenter, WorldPosition delta)
+        {
+            UpdateWorldPosition(sceneCenter, delta);
+            UpdateUnityPosition(sceneCenter);
         }
 
         public override string ToString() {
