@@ -292,60 +292,69 @@ namespace Spaceworks {
             activeChunks.Clear();
         }
 
-        private void ShowNodeMerge(QuadNode<ChunkData> node, MeshData mesh, HashSet<QuadNode<ChunkData>> activeList) {
+        private void ShowNodeMerge(QuadNode<ChunkData> node, MeshData mesh, HashSet<QuadNode<ChunkData>> activeList)
+        {
+            if (!chunkMeshMap.ContainsKey(node)) {
+                //Buffer
+                while (meshPool.Count < 3) {
+                    GameObject g = new GameObject("Chunk");
+                    g.transform.SetParent(go.transform);
+                    g.transform.localPosition = Vector3.zero;
 
-              if (!chunkMeshMap.ContainsKey(node)) {
-                  //Buffer
-                  while (meshPool.Count < 3) {
-                      GameObject g = new GameObject("Chunk");
-                      g.transform.SetParent(go.transform);
-                      g.transform.localPosition = Vector3.zero;
+                    MeshFilter meshFilter = g.AddComponent<MeshFilter>();
+                    Mesh m = new Mesh();
+                    m.name = "Cached Chunk Mesh";
+                    meshFilter.sharedMesh = m;
 
-                      MeshFilter meshFilter = g.AddComponent<MeshFilter>();
-                      Mesh m = new Mesh();
-                      m.name = "Cached Chunk Mesh";
-                      meshFilter.sharedMesh = m;
+                    MeshRenderer meshRenderer = g.AddComponent<MeshRenderer>();
+                    meshRenderer.sharedMaterial = this.material;
+                    g.SetActive(false);
 
-                      MeshRenderer meshRenderer = g.AddComponent<MeshRenderer>();
-                      meshRenderer.sharedMaterial = this.material;
-                      g.SetActive(false);
+                    //Add collider
+                    g.AddComponent<MeshCollider>();
 
-                      meshPool.Enqueue(meshFilter);
-                  }
+                    meshPool.Enqueue(meshFilter);
+                }
 
-                  MeshFilter filter = meshPool.Dequeue();
-                  filter.sharedMesh = mesh.mesh;
+                MeshFilter filter = meshPool.Dequeue();
+                filter.sharedMesh = mesh.mesh;
 
-                  if (node.value.bounds == null) {
-                      node.value.bounds = new Sphere(Vector3.zero, 1);
-                      node.value.bounds.center = filter.sharedMesh.bounds.center;
-                      node.value.bounds.radius = Mathf.Sqrt(
-                          filter.sharedMesh.bounds.extents.x * filter.sharedMesh.bounds.extents.x +
-                          filter.sharedMesh.bounds.extents.y * filter.sharedMesh.bounds.extents.y +
-                          filter.sharedMesh.bounds.extents.z * filter.sharedMesh.bounds.extents.z
-                      );
-                  }
+                if (node.value.bounds == null) {
+                    node.value.bounds = new Sphere(Vector3.zero, 1);
+                    node.value.bounds.center = filter.sharedMesh.bounds.center;
+                    node.value.bounds.radius = Mathf.Sqrt(
+                        filter.sharedMesh.bounds.extents.x * filter.sharedMesh.bounds.extents.x +
+                        filter.sharedMesh.bounds.extents.y * filter.sharedMesh.bounds.extents.y +
+                        filter.sharedMesh.bounds.extents.z * filter.sharedMesh.bounds.extents.z
+                    );
+                }
 
-                  //Show node
-                  filter.gameObject.SetActive(true);
+                //Show node
+                filter.gameObject.SetActive(true);
 
-                  //Call highest detail action
-                  if (node.depth == this.maxDepth) {
-                      //Call listeners if exists
-                      foreach (System.Action<QuadNode<ChunkData>> fn in this.listeners) {
-                          fn.Invoke(node);
-                      }
-                      //Call detailing service if available
-                      if (detailService != null)
-                          detailService.ShowChunkDetails(node, filter.sharedMesh);
-                  }
+                //Call highest detail action
+                if (node.depth == this.maxDepth - 1) {
+                    //Call listeners if exists
+                    foreach (System.Action<QuadNode<ChunkData>> fn in this.listeners) {
+                        fn.Invoke(node);
+                    }
+                    //Call detailing service if available
+                    if (detailService != null)
+                        detailService.ShowChunkDetails(node, filter.sharedMesh);
+                }
+                //Set mesh as collider
+                MeshCollider mc = filter.gameObject.GetComponent<MeshCollider>();
+                if (mc != null)
+                {
+                    mc.sharedMesh = filter.sharedMesh;
+                }
 
-                  //Add me if I don't already exist
-                  this.activeMeshes.Add(filter);
-                  this.chunkMeshMap[node] = filter;
-              }
-              if (!activeList.Contains(node))
-                  activeList.Add(node);
+                //Add me if I don't already exist
+                this.activeMeshes.Add(filter);
+                this.chunkMeshMap[node] = filter;
+            }
+            if (!activeList.Contains(node))
+                activeList.Add(node);
         }
 
         private void ShowNodeSplit(QuadNode<ChunkData> parent, MeshData[] meshes, HashSet<QuadNode<ChunkData>> activeList) {
@@ -366,6 +375,9 @@ namespace Spaceworks {
                         MeshRenderer meshRenderer = g.AddComponent<MeshRenderer>();
                         meshRenderer.sharedMaterial = this.material;
                         g.SetActive(false);
+
+                        //Add collider
+                        g.AddComponent<MeshCollider>();
 
                         meshPool.Enqueue(meshFilter);
                     }
@@ -396,6 +408,10 @@ namespace Spaceworks {
                         if (detailService != null)
                             detailService.ShowChunkDetails(child, filter.sharedMesh);
                     }
+                    //Set mesh as collider
+                    MeshCollider mc = filter.gameObject.GetComponent<MeshCollider>();
+                    if (mc != null)
+                        mc.sharedMesh = filter.sharedMesh;
 
                     //Add me if I don't already exist
                     this.activeMeshes.Add(filter);
@@ -422,6 +438,9 @@ namespace Spaceworks {
                     MeshRenderer meshRenderer = g.AddComponent<MeshRenderer>();
 					meshRenderer.sharedMaterial = this.material;
                     g.SetActive(false);
+
+                    //Add collider
+                    g.AddComponent<MeshCollider>();
 
                     meshPool.Enqueue(meshFilter);
                 }
@@ -457,10 +476,16 @@ namespace Spaceworks {
 					foreach(System.Action<QuadNode<ChunkData>> fn in this.listeners){
 						fn.Invoke (node);
 					}
+
 					//Call detailing service if available
 					if (detailService != null)
 						detailService.ShowChunkDetails (node, filter.sharedMesh);
-				}
+
+                }
+                //Set mesh as collider
+                MeshCollider mc = filter.gameObject.GetComponent<MeshCollider>();
+                if (mc != null)
+                    mc.sharedMesh = filter.sharedMesh;
 
                 //Add me if I don't already exist
                 this.activeMeshes.Add(filter);
