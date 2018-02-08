@@ -26,18 +26,20 @@ namespace Spaceworks.Position {
 		}
 
         public Transform foci;
-        public float bufferDistance = 1000;
+        public float bufferDistance = 1000.0f;
+        public bool useFixedUpdate = true;
 
         void Awake() {
             //Assign the static instance
             instance = this;
             //Set the default sector size to be the same as the buffer distance
 			SetSectorSize(bufferDistance);
+            instance.sceneCenter = new WorldPosition(0.0f, 0.0f, 0.0f);
         }
 
-		public void SetSectorSize(float distance){
-			WorldPosition.defaultSectorSize = new Vector3(distance, distance, distance);
-		}
+        public void SetSectorSize(float distance){
+            WorldPosition.defaultSectorSize = new Vector3(distance, distance, distance);
+        }
 
         public static void Add(FloatingTransform tr) {
             if (instance)
@@ -58,6 +60,18 @@ namespace Spaceworks.Position {
         }
 
         void Update() {
+            if (!useFixedUpdate)
+                MoveFloatingTransforms();
+        }
+
+        void FixedUpdate()
+        {
+            if (useFixedUpdate)
+                MoveFloatingTransforms();
+        }
+
+        void MoveFloatingTransforms()
+        {
             if (!foci)
                 return;
             
@@ -72,7 +86,5 @@ namespace Spaceworks.Position {
                 }
             }
         }
-
     }
-
 }
