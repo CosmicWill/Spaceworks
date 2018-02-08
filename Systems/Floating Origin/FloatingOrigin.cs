@@ -82,7 +82,7 @@ namespace Spaceworks.Position {
 
                 foreach (FloatingTransform tr in monitored) {
                     if(tr != null)
-                        tr.OnOriginChange(this.sceneCenter);
+                        tr.OnOriginChange(this.sceneCenter, delta);
                 }
             }
         }
