@@ -34,7 +34,7 @@ namespace Spaceworks {
             generatedPlanet.UpdateLODs(Camera.main.transform.position);
         }
 
-        public override void OnOriginChange (WorldPosition sceneCenter)
+        public override void OnOriginChange (WorldPosition sceneCenter, WorldPosition delta = null)
         {
             base.OnOriginChange (sceneCenter);
             if (generatedPlanet != null)
