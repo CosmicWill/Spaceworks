@@ -83,12 +83,14 @@ namespace Spaceworks.Position {
 
         public void SetWorldPosition(WorldPosition p, WorldPosition center = null) {
             this.worldPosition = p;
+            /*
             if (!center.Equals(null)) {
                 UpdateUnityPosition(center);
             }
             else {
+            */
                 UpdateUnityPosition();
-            }
+            //}
         }
 
         public void UpdateUnityPosition(){
