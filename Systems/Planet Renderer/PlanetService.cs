@@ -14,7 +14,7 @@ namespace Spaceworks {
 
         // Use this for initialization
         new void Start() {
-			base.Start ();
+            base.Start ();
 
             //Create the planet
             Planet p = new Planet(config);
@@ -34,11 +34,12 @@ namespace Spaceworks {
             generatedPlanet.UpdateLODs(Camera.main.transform.position);
         }
 
-		public override void OnOriginChange (WorldPosition sceneCenter){
-			base.OnOriginChange (sceneCenter);
-			if (generatedPlanet != null)
-				generatedPlanet.UpdateMaterial (this.gameObject);
-		}
+        public override void OnOriginChange (WorldPosition sceneCenter)
+        {
+            base.OnOriginChange (sceneCenter);
+            if (generatedPlanet != null)
+                generatedPlanet.UpdateMaterial (this.gameObject);
+        }
 
     }
 
