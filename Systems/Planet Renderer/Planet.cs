@@ -533,7 +533,6 @@ namespace Spaceworks {
 
         public Planet(PlanetConfig config) {
             this.config = config;
-            
         }
 
         /// <summary>
@@ -588,32 +587,32 @@ namespace Spaceworks {
 
             UpdateMaterial (go, true);
 
-			this.topFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, topRange, config.material);
+            this.topFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, topRange, config.material);
 			this.topFace.go.name = "Top";
 			this.topFace.transform.SetParent(go.transform);
             this.topFace.transform.localPosition = Vector3.zero;
 
-			this.bottomFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, bottomRange, config.material);
+            this.bottomFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, bottomRange, config.material);
 			this.bottomFace.go.name = "Bottom";
 			this.bottomFace.transform.SetParent(go.transform);
             this.bottomFace.transform.localPosition = Vector3.zero;
 
-			this.leftFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, leftRange, config.material);
+            this.leftFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, leftRange, config.material);
 			this.leftFace.go.name = "Left";
 			this.leftFace.transform.SetParent(go.transform);
             this.leftFace.transform.localPosition = Vector3.zero;
 
-			this.rightFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, rightRange, config.material);
+            this.rightFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, rightRange, config.material);
 			this.rightFace.go.name = "Right";
 			this.rightFace.transform.SetParent(go.transform);
             this.rightFace.transform.localPosition = Vector3.zero;
 
-			this.backFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, backRange, config.material);
+            this.backFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, backRange, config.material);
 			this.backFace.go.name = "Back";
 			this.backFace.transform.SetParent(go.transform);
             this.backFace.transform.localPosition = Vector3.zero;
 
-			this.frontFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, frontRange, config.material);
+            this.frontFace = new PlanetFace(config.generationService, config.detailService, config.radius, config.highestQualityAtDistance, config.lodDepth, frontRange, config.material);
 			this.frontFace.go.name = "Front";
 			this.frontFace.transform.SetParent(go.transform);
             this.frontFace.transform.localPosition = Vector3.zero;
