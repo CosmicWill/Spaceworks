@@ -56,10 +56,10 @@ namespace Spaceworks {
             return colliders;
         }
 
-        public override void OnOriginChange (WorldPosition sceneCenter){
+        public override void OnOriginChange (WorldPosition sceneCenter, WorldPosition delta = null){
 			base.OnOriginChange (sceneCenter);
 			if (generatedPlanet != null)
-				generatedPlanet.UpdateMaterial (this.gameObject);
+				generatedPlanet.UpdateMaterial(this.gameObject);
 		}
 
     }

@@ -161,11 +161,21 @@ namespace Spaceworks.Position {
             }
         }
 
+        public void UpdateWorldPosition(WorldPosition sceneCenter, WorldPosition delta) {
+            this.worldPosition = new WorldPosition(this.unityPosition) + (sceneCenter - delta);
+        }
+
         /// <summary>
         /// Called automatically to update positional data when the offset of the FloatingOrigin changes
         /// </summary>
         /// <param name="sceneCenter"></param>
 		public virtual void OnOriginChange(WorldPosition sceneCenter) {
+            UpdateUnityPosition(sceneCenter);
+        }
+
+        public virtual void OnOriginChange(WorldPosition sceneCenter, WorldPosition delta)
+        {
+            UpdateWorldPosition(sceneCenter, delta);
             UpdateUnityPosition(sceneCenter);
         }
 
